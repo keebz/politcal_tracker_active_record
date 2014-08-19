@@ -4,6 +4,7 @@ class CreateRepresentatives < ActiveRecord::Migration
     t.column :name, :string
     t.column :state_id, :int
     t.column :type_id, :int
+    t.column :party_id, :int
     end
   end
 end
