@@ -71,7 +71,26 @@ def list_parties
 end
 
 
+def add_representative
+	puts "Please enter your new representatives name:"
+	name = gets.chomp.capitalize
+	puts "Please enter your new representatives state:"
+	user_state = gets.chomp.capitalize
+		if State.find_by(name: user_state) == nil
+			state = State.create({name: user_state})
+		else
+			state = State.find_by(name: user_state)
+		end
 
+	puts "Please enter the name of your new representatives party:"
+	list_parties
+	party = Party.find_by(name: gets.chomp.capitalize)
+	puts "Please enter the type of public servant the representive is:"
+	puts "Example: 'Senator'"
+	type = Type.create({name: gets.chomp.capitalize})
+	new_representative = Representative.create({name: name, state_id: state.id, party_id: party.id, type_id: type.id})
+	puts party.name + " " + type.name + " " + new_representative.name + " from the state of " + state.name + " has been added!"
+end
 
 
 main
