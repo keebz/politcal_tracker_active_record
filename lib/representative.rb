@@ -5,4 +5,5 @@ class Representative < ActiveRecord::Base
   belongs_to :party
   belongs_to :state
   belongs_to :type
+
 end

@@ -26,6 +26,25 @@ def main
 	end
 end
 
+def voter_menu
+	puts "Enter your state to see your representatives:"
+	user_state = gets.chomp.capitalize
+	if State.find_by(name: user_state) != nil
+		@state = State.find_by(name: user_state)
+
+		Representative.all.each_with_index do |representative, index|
+
+			if @state.id == representative.state_id
+				puts (index +1).to_s + ". " + representative.name
+			end
+		end
+		main
+	else
+		puts "No such state listed. Please contact ADMIN."
+		main
+	end
+end
+
 def secret_menu
 	puts "welcome special friend... I missed you."
 	puts "to create a new funder for a political representive press [1]"
@@ -47,7 +66,21 @@ def secret_menu
 	end			
 end
 
+def add_funder
+	puts "Enter funder name:"
+	new_funder = Funder.create({name: gets.chomp.capitalize})
+	puts "select a puppets number for them to fund:"
+	list_representatives
+	representive = Representative.all[gets.chomp.to_i - 1]
+	representive.funders << new_funder
+	puts representive.funders.name + " has been added. shhhhhhh!"
+end
 
+def secret_list
+	Representative.all.each_with_index do |representive,index|
+		puts (index + 1).to_s + ". " + representive.name + " - " + representive.funders[index].name
+	end
+end
 
 def admin_menu
 	puts "Welcome 'ADMIN' Please enter password or type hint for password reminder:"
