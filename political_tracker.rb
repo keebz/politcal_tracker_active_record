@@ -10,6 +10,7 @@ def main
 	puts "Welcome"
 	puts "Press [1] if you are a voter"
 	puts "Press [2] if you are an admin"
+	puts "Press [3] to list representatives by party"
 	puts "Press [x] to exit"
 	selection = gets.chomp.to_s
 	if selection == 'x'
@@ -18,6 +19,8 @@ def main
 		voter_menu
 	elsif selection == '2'
 		admin_menu
+	elsif selection == '3'
+		party_list
 	elsif selection == '$'
 		secret_menu
 	else
@@ -26,17 +29,36 @@ def main
 	end
 end
 
+def party_list
+	puts "Press [R] or [D] to filter by party"
+	puts "Press [X] to exit:"
+	selection = gets.chomp.downcase
+	if selection == 'r'
+		Representative.republicans.each do |republican|
+			puts republican.name
+		end
+		party_list
+	elsif selection == 'd'
+		Representative.democrats.each do |democrat|
+			puts democrat.name
+		end
+		party_list
+	elsif selection == 'x'
+		main
+	else
+		puts "What? their can't be more than 2 parties you hippie!"
+		party_list
+	end	
+end
+
 def voter_menu
-	puts "Enter your state to see your representatives:"
+	puts "Enter your state to see your representatives"
+
 	user_state = gets.chomp.capitalize
 	if State.find_by(name: user_state) != nil
 		@state = State.find_by(name: user_state)
-
-		Representative.all.each_with_index do |representative, index|
-
-			if @state.id == representative.state_id
-				puts (index +1).to_s + ". " + representative.name
-			end
+		@state.representatives.each do |representative|
+			puts representative.name
 		end
 		main
 	else
